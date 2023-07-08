@@ -120,7 +120,7 @@ class Test_DTMMonitorsClient(unittest.TestCase):
   def test_get_list_single_page(self):
     monitors = self.dtm_monitors_client.get_list(size=11)
 
-    monitors = [i for i in monitors]
+    monitors = list(monitors)
     for i in monitors:
       self.assertIsInstance(i, mandiant_threatintel.DTMMonitor)
 
@@ -130,7 +130,7 @@ class Test_DTMMonitorsClient(unittest.TestCase):
   def test_get_list_multiple_pages(self):
     monitors = self.dtm_monitors_client.get_list(size=1)
 
-    monitors = [i for i in monitors]
+    monitors = list(monitors)
     for i in monitors:
       self.assertIsInstance(i, mandiant_threatintel.DTMMonitor)
 

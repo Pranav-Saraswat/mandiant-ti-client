@@ -47,16 +47,14 @@ class Test_DTMAlertsClient(unittest.TestCase):
 
   @mock_vcr.use_cassette
   def test_get_list_single_page(self):
-    alerts_list = [m for m in self.dtm_alerts_client.get_list(size=1)]
+    alerts_list = list(self.dtm_alerts_client.get_list(size=1))
 
     self.assertEqual(len(alerts_list), 1)
 
   @mock_vcr.use_cassette
   def test_get_list_single_page_parameters(self):
-    alerts_list = [
-        m
-        for m in self.dtm_alerts_client.get_list(size=1, status=["new", "read"])
-    ]
+    alerts_list = list(
+        self.dtm_alerts_client.get_list(size=1, status=["new", "read"]))
 
     self.assertEqual(len(alerts_list), 1)
 

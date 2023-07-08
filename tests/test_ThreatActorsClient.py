@@ -199,14 +199,13 @@ class Test_ThreatActorsClient(unittest.TestCase):
     threatactor = self.threatactor_client.get(actor_id)
 
     attributes_list = [
-        attr
-        for attr in dir(threatactor)
-        if attr[0:1] != "_" and attr[0:4] != "from" and attr not in ["reports"]
+        attr for attr in dir(threatactor)
+        if attr[:1] != "_" and attr[:4] != "from" and attr not in ["reports"]
     ]
     for attr in attributes_list:
       attr_value = threatactor.__getattr__(attr)
       if isinstance(attr_value, types.GeneratorType):
-        attr_value = [v for v in attr_value]
+        attr_value = list(attr_value)
 
       print(f"{attr}: {attr_value}")
 

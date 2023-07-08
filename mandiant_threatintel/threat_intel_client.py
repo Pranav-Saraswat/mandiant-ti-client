@@ -94,7 +94,7 @@ def create_indicator(indicator_api_response: dict, client: ThreatIntelClient):
   if indicator_type is None:
     # Fallback - attempt to get type from ID
     uuid = indicator_api_response.get("id")
-    indicator_type = uuid[0 : uuid.index("--")]
+    indicator_type = uuid[:uuid.index("--")]
 
   INDICATOR_MAP = {
       "md5": MD5Indicator,
@@ -695,7 +695,7 @@ class IndicatorsClient:
       params["end_epoch"] = int(end_epoch.timestamp())
 
     # Using 'dict.update()' for compatibility with Python 3.8
-    params.update(kwargs)
+    params |= kwargs
 
     while True:
       api_response = self._base_client.make_get_request(
@@ -991,7 +991,7 @@ class DTMAlertsClient:
     Returns: An updated DTMAlert object
     """
     endpoint = f"{API_DTM_ALERTS_ROOT}/{alert.id}"
-    payload = dict()
+    payload = {}
 
     if status:
       payload["status"] = status.value
@@ -1141,7 +1141,7 @@ class DTMDocsClient:
         A generator of DTMDocuments.
     """
     size = size or 25
-    params = {"size": size, "sanitize": bool(sanitize)}
+    params = {"size": size, "sanitize": sanitize}
 
     if since:
       params["since"] = since.isoformat()
@@ -1168,9 +1168,8 @@ class DTMDocsClient:
 
       if len(api_response["docs"]) < size:
         break
-      else:
-        params = {}
-        endpoint = api_response["page"]
+      params = {}
+      endpoint = api_response["page"]
 
   def get_raw(
       self,
@@ -2152,10 +2151,7 @@ class APIResponse:
 
     postparser = self._QUERY_MAP[item].get("postparser", lambda _, client: _)
 
-    if field_value is None:
-      return None
-
-    return postparser(field_value, self._client)
+    return None if field_value is None else postparser(field_value, self._client)
 
   def __dir__(self):
     """Return a list of attributes based on the query map."""

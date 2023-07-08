@@ -259,38 +259,28 @@ class Test_CampaignsClient(unittest.TestCase):
     )
 
     attributes_list = [
-        attr
-        for attr in dir(malware)
-        if attr[0:1] != "_" and attr[0:4] != "from"
+        attr for attr in dir(malware) if attr[:1] != "_" and attr[:4] != "from"
     ]
     for attr in attributes_list:
       attr_value = malware.__getattr__(attr)
       if isinstance(attr_value, types.GeneratorType):
-        attr_value = [v for v in attr_value]
+        attr_value = list(attr_value)
 
       print(f"{attr}: {attr_value}")
 
   @mock_vcr.use_cassette
   def test_get_list_multiple_pages(self):
     start_date = datetime.datetime.fromtimestamp(1674825974)
-    campaigns_list = [
-        m
-        for m in self.campaigns_client.get_list(
-            page_size=1, start_date=start_date
-        )
-    ]
+    campaigns_list = list(
+        self.campaigns_client.get_list(page_size=1, start_date=start_date))
 
     self.assertEqual(len(campaigns_list), 2)
 
   @mock_vcr.use_cassette
   def test_get_list_single_page(self):
     start_date = datetime.datetime.fromtimestamp(1674825974)
-    campaigns_list = [
-        m
-        for m in self.campaigns_client.get_list(
-            page_size=50, start_date=start_date
-        )
-    ]
+    campaigns_list = list(
+        self.campaigns_client.get_list(page_size=50, start_date=start_date))
 
     self.assertEqual(len(campaigns_list), 1)
 

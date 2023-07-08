@@ -89,15 +89,13 @@ class Test_ReportsClient(unittest.TestCase):
     # Manually specifying cassette path and using `with` in order to allow
     # repeat playback and reduce the number of recorded API calls
     with mock_vcr.use_cassette(
-        'fixtures/ReportsClient/test_get_all_attributes.yaml',
-        allow_playback_repeats=True,
-    ):
+          'fixtures/ReportsClient/test_get_all_attributes.yaml',
+          allow_playback_repeats=True,
+      ):
       report = self.reports_client.get('22-00018039')
 
       attributes_list = [
-          attr
-          for attr in dir(report)
-          if attr[0:1] != '_' and attr[0:4] != 'from'
+          attr for attr in dir(report) if attr[:1] != '_' and attr[:4] != 'from'
       ]
       ignore_list = ['indicators']
 
@@ -106,7 +104,7 @@ class Test_ReportsClient(unittest.TestCase):
           try:
             attr_value = report.__getattr__(attr)
             if isinstance(attr_value, types.GeneratorType):
-              attr_value = [v for v in attr_value]
+              attr_value = list(attr_value)
             if attr not in ['pdf', 'html']:
               print(f'{attr}: {attr_value}')
           except AttributeError as e:

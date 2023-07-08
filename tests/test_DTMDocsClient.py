@@ -99,7 +99,7 @@ class Test_DTMDocsClient(unittest.TestCase):
 
   @mock_vcr.use_cassette
   def test_search_no_params_two_page(self):
-    docs = [i for i in self.dtm_docs_client.search(query="test", size=1)]
+    docs = list(self.dtm_docs_client.search(query="test", size=1))
 
     self.assertIsInstance(docs[0], mandiant_threatintel.DTMDocument)
     self.assertEqual(len(docs), 1)

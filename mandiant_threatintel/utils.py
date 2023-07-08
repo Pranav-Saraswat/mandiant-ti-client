@@ -41,7 +41,7 @@ def create_indicator(indicator_api_response: dict, client: ThreatIntelClient):
   if indicator_type is None:
     # Fallback - attempt to get type from ID
     uuid = indicator_api_response.get("id")
-    indicator_type = uuid[0 : uuid.index("--")]
+    indicator_type = uuid[:uuid.index("--")]
 
   INDICATOR_MAP = {
       "md5": MD5Indicator,

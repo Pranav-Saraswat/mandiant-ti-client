@@ -251,21 +251,18 @@ class Test_IndicatorsClient(unittest.TestCase):
         'ipv4--ae71927b-78e2-5659-8576-af0dc232b3e9',
     ]
     for indicator_id in indicators:
-      indicator_type = indicator_id[0 : indicator_id.index('--')]
+      indicator_type = indicator_id[:indicator_id.index('--')]
       with self.subTest(msg=indicator_type):
         indicator = self.indicators_client.get(indicator_id)
 
         attributes_list = [
-            attr
-            for attr in dir(indicator)
-            if attr[0:1] != '_'
-            and attr[0:4] != 'from'
-            and attr not in ['reports']
+            attr for attr in dir(indicator) if attr[:1] != '_'
+            and attr[:4] != 'from' and attr not in ['reports']
         ]
         for attr in attributes_list:
           attr_value = indicator.__getattr__(attr)
           if isinstance(attr_value, types.GeneratorType):
-            attr_value = [v for v in attr_value]
+            attr_value = list(attr_value)
 
           print(f'{attr}: {attr_value}')
 
@@ -278,7 +275,7 @@ class Test_IndicatorsClient(unittest.TestCase):
         'ipv4--ae71927b-78e2-5659-8576-af0dc232b3e9',
     ]
     for indicator_id in indicators:
-      indicator_type = indicator_id[0 : indicator_id.index('--')]
+      indicator_type = indicator_id[:indicator_id.index('--')]
       with self.subTest(msg=indicator_type):
         indicator = self.indicators_client.get(indicator_id)
         for report in indicator.reports:
